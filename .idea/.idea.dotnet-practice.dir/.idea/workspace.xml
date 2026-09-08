@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8efef3c-2240-4489-a113-15a13c1905af" name="Changes" comment="" />
+    <list default="true" id="1e1da1ff-e0f3-4270-9882-375534d56e70" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6,
+  "associatedIndex": 7,
   "fromUser": false
 }]]></component>
-  <component name="ProjectId" id="3J2K9JsjPA6TaCZmfPkXg8oFPDs" />
+  <component name="ProjectId" id="3J2L67dbBJIDiDs6T4qrDIoX4MT" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -24,11 +24,11 @@
 }]]></component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <created>1788853571967</created>
+      <created>1788854037242</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1788853571967</updated>
-      <workItem from="1788853573570" duration="455000" />
+      <updated>1788854037242</updated>
+      <workItem from="1788854040132" duration="158000" />
     </task>
     <servers />
   </component>
