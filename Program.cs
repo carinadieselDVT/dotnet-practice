@@ -15,9 +15,24 @@ public class Elevator
     private const int MaxFloor = 5;
     
     // Current Floor
-    public int CurrentFloor { get; private set; } = 1; 
+    public int CurrentFloor { get; private set; } = 1;
+    // Status - Closed by default
+    public Status DoorStatus { get; private set; } = Status.Closed;
+    // Direction - Stationary by default
+    public Direction Direction { get; private set; } = Direction.Stationary;
+    
     // Open Doors
+    public void OpenDoors()
+    {
+        DoorStatus = Status.Open;
+        Console.WriteLine($"Doors open on floor {CurrentFloor}");
+    }
     // Close Doors
+    public void CloseDoors()
+    {
+        DoorStatus = Status.Closed;
+        Console.WriteLine($"Doors closed on floor {CurrentFloor}");
+    }
     // Go to floor
 }
 
