@@ -55,7 +55,7 @@ public class Elevator
         while (CurrentFloor != floor)
         {
             CurrentFloor += CurrentDirection == Direction.Up ? 1 : -1;
-            Console.WriteLine($"  Floor {CurrentFloor}");
+            Console.WriteLine($"Floor {CurrentFloor}");
         }
 
         CurrentDirection = Direction.Stationary;
