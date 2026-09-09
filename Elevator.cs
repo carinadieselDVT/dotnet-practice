@@ -1,9 +1,9 @@
 public class Elevator
 {
     // Hardcoded building params
-    private const int MinFloor = 1;
-    private const int MaxFloor = 5;
-    private const int GroundFloor = MinFloor;
+    public const int MinFloor = 1;
+    public const int MaxFloor = 5;
+    public const int GroundFloor = MinFloor;
 
     // Current Floor
     public int CurrentFloor { get; private set; } = GroundFloor;
@@ -70,7 +70,11 @@ public class Elevator
 
     public void PrintStatus()
     {
+        var directionDescription = CurrentDirection == Direction.Stationary
+            ? CurrentDirection.ToString()
+            : $"Going {CurrentDirection}";
+
         Console.WriteLine(
-            $"Status - floor : {CurrentFloor}, Doors {DoorStatus}, ({CurrentDirection} == {Direction.Stationary} ? {CurrentDirection} : Going {CurrentDirection})");
+            $"Status - Floor: {CurrentFloor}, Doors: {DoorStatus}, Direction: {directionDescription}");
     }
 }
