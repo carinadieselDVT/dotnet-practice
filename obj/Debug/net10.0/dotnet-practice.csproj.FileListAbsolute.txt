@@ -1,0 +1,15 @@
+/Users/carinadiesel/dotnet-practice/obj/Debug/net10.0/dotnet-practice.GeneratedMSBuildEditorConfig.editorconfig
+/Users/carinadiesel/dotnet-practice/obj/Debug/net10.0/dotnet-practice.AssemblyInfoInputs.cache
+/Users/carinadiesel/dotnet-practice/obj/Debug/net10.0/dotnet-practice.AssemblyInfo.cs
+/Users/carinadiesel/dotnet-practice/obj/Debug/net10.0/dotnet-practice.csproj.CoreCompileInputs.cache
+/Users/carinadiesel/dotnet-practice/obj/Debug/net10.0/dotnet-practice.sourcelink.json
+/Users/carinadiesel/dotnet-practice/bin/Debug/net10.0/dotnet-practice
+/Users/carinadiesel/dotnet-practice/bin/Debug/net10.0/dotnet-practice.deps.json
+/Users/carinadiesel/dotnet-practice/bin/Debug/net10.0/dotnet-practice.runtimeconfig.json
+/Users/carinadiesel/dotnet-practice/bin/Debug/net10.0/dotnet-practice.dll
+/Users/carinadiesel/dotnet-practice/bin/Debug/net10.0/dotnet-practice.pdb
+/Users/carinadiesel/dotnet-practice/obj/Debug/net10.0/dotnet-practice.dll
+/Users/carinadiesel/dotnet-practice/obj/Debug/net10.0/refint/dotnet-practice.dll
+/Users/carinadiesel/dotnet-practice/obj/Debug/net10.0/dotnet-practice.pdb
+/Users/carinadiesel/dotnet-practice/obj/Debug/net10.0/dotnet-practice.genruntimeconfig.cache
+/Users/carinadiesel/dotnet-practice/obj/Debug/net10.0/ref/dotnet-practice.dll
