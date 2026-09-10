@@ -6,10 +6,25 @@ int minFloor = ReadInt("Lowest floor (e.g. -2 for basement, or 1): ", minAllowed
 int maxFloor = ReadInt($"Highest floor (must be >= {minFloor}): ", minAllowed: minFloor, maxAllowed: 200);
 
 var building = new Building(minFloor, maxFloor);
-var elevator = new Elevator(building);
+
+const int MaxElevators = 5;
+
+int elevatorCount = ReadInt(
+    $"How many elevators? (1-{MaxElevators}): ",
+    minAllowed: 1,
+    maxAllowed: MaxElevators);
+
+var elevators = new List<Elevator>();
+
+for (int elevatorId = 1; elevatorId <= elevatorCount; elevatorId++)
+{
+    elevators.Add(new Elevator(elevatorId, building));
+}
+
+var elevator = elevators[0];
 
 Console.WriteLine($"\nBuilding ready: floors {building.MinFloor} to {building.MaxFloor}.");
-Console.WriteLine($"Elevator starting at ground floor ({elevator.GroundFloor}).");
+Console.WriteLine($"{elevators.Count} elevators starting at ground floor ({elevator.GroundFloor}).");
 Console.WriteLine("Press Enter to continue...");
 Console.ReadLine();
 Console.Clear();
@@ -18,7 +33,7 @@ Console.Clear();
 bool running = true;
 while (running)
 {
-    ShowMenu(elevator);
+    ShowMenu(elevators);
     string? choice = Console.ReadLine()?.Trim();
 
     if (string.IsNullOrEmpty(choice))
@@ -44,11 +59,16 @@ while (running)
     Console.WriteLine();
 }
 
-static void ShowMenu(Elevator elevator)
+static void ShowMenu(IReadOnlyList<Elevator> elevators)
 {
     Console.WriteLine("=== Elevator Sim ===");
-    elevator.PrintStatus();
-    Console.WriteLine($"Select a floor between {elevator.MinFloor} and {elevator.MaxFloor}:");
+    foreach (var elevator in elevators)
+    {
+        elevator.PrintStatus();
+    }
+
+    var first = elevators[0];
+    Console.WriteLine($"Select a floor between {first.MinFloor} and {first.MaxFloor}:");
     Console.WriteLine("Press Q to quit");
 }
 

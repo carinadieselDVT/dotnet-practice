@@ -8,8 +8,11 @@ public class Elevator
 
     // Current Floor
     public int CurrentFloor { get; private set; }
-    public Elevator(Building building)
+
+    public int Id { get; }
+    public Elevator(int id, Building building)
     {
+        Id = id;
         _building = building;
         MinFloor = building.MinFloor;
         MaxFloor = building.MaxFloor;
@@ -84,6 +87,6 @@ public class Elevator
             : $"Going {CurrentDirection}";
 
         Console.WriteLine(
-            $"Status - Floor: {CurrentFloor}, Doors: {DoorStatus}, Direction: {directionDescription}");
+            $"Elevator {Id} - Floor: {CurrentFloor}, Doors: {DoorStatus}, Direction: {directionDescription}");
     }
 }
