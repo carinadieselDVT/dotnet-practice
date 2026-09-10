@@ -1,12 +1,20 @@
 public class Elevator
 {
+    private readonly Building _building;
     // Hardcoded building params
-    public const int MinFloor = 1;
-    public const int MaxFloor = 5;
-    public const int GroundFloor = MinFloor;
+    public int MinFloor { get; }
+    public int MaxFloor { get; }
+    public int GroundFloor => MinFloor;
 
     // Current Floor
-    public int CurrentFloor { get; private set; } = GroundFloor;
+    public int CurrentFloor { get; private set; }
+    public Elevator(Building building)
+    {
+        _building = building;
+        MinFloor = building.MinFloor;
+        MaxFloor = building.MaxFloor;
+        CurrentFloor = GroundFloor;
+    }
 
     // Status - Closed by default
     public Status DoorStatus { get; private set; } = Status.Closed;
@@ -55,7 +63,8 @@ public class Elevator
         while (CurrentFloor != floor)
         {
             CurrentFloor += CurrentDirection == Direction.Up ? 1 : -1;
-            Console.WriteLine($"  Floor {CurrentFloor}");
+            Console.WriteLine(
+                $"Current Floor : {CurrentFloor} {(CurrentDirection == Direction.Up ? "\u2B06" : "\u2B07")}");
         }
 
         CurrentDirection = Direction.Stationary;
