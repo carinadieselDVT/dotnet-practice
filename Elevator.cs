@@ -10,10 +10,13 @@ public class Elevator
     public int CurrentFloor { get; private set; }
 
     public int Id { get; }
-    public Elevator(int id, Building building)
+    public ElevatorType Type { get; }
+
+    public Elevator(int id, Building building, ElevatorType type)
     {
         Id = id;
         _building = building;
+        Type = type ?? throw new ArgumentNullException(nameof(type));
         MinFloor = building.MinFloor;
         MaxFloor = building.MaxFloor;
         CurrentFloor = GroundFloor;
@@ -87,6 +90,6 @@ public class Elevator
             : $"Going {CurrentDirection}";
 
         Console.WriteLine(
-            $"Elevator {Id} - Floor: {CurrentFloor}, Doors: {DoorStatus}, Direction: {directionDescription}");
+            $"Elevator {Id} [{Type.Kind}] - Floor: {CurrentFloor}, Doors: {DoorStatus}, Direction: {directionDescription}");
     }
 }

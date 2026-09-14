@@ -18,7 +18,7 @@ var elevators = new List<Elevator>();
 
 for (int elevatorId = 1; elevatorId <= elevatorCount; elevatorId++)
 {
-    elevators.Add(new Elevator(elevatorId, building));
+    elevators.Add(new Elevator(elevatorId, building, ElevatorType.Passenger()));
 }
 
 var controller = new ElevatorController(elevators);

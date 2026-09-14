@@ -22,7 +22,6 @@ public sealed class ElevatorController
             elevator.PrintStatus();
         }
     }
-
     public void GoTo(int elevatorId, int floor)
     {
         ElevatorExists(elevatorId).GoTo(floor);
