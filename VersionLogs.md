@@ -19,3 +19,8 @@
 - Asks user how many elevators in building
 - Assumes all elevators can access the same levels
 - Floor selection only happens for floor 1
+
+## V1.2
+
+- Uses facade pattern to implement a application-facing API for the whole elevator fleet,aka the controller
+-
