@@ -14,18 +14,30 @@ int elevatorCount = ReadInt(
     minAllowed: 1,
     maxAllowed: MaxElevators);
 
+const int MinPassengers = 1;
+const int MaxPassengersAllowed = 20;
+int maxPassengers = ReadInt(
+    $"Max passengers per elevator ({MinPassengers}-{MaxPassengersAllowed}): ",
+    minAllowed: MinPassengers,
+    maxAllowed: MaxPassengersAllowed);
+
+// Same type/limits for every elevator in the building
+var passengerType = ElevatorType.Passenger(maxPassengers);
+
 var elevators = new List<Elevator>();
 
 for (int elevatorId = 1; elevatorId <= elevatorCount; elevatorId++)
 {
-    elevators.Add(new Elevator(elevatorId, building, ElevatorType.Passenger()));
+    elevators.Add(new Elevator(elevatorId, building, passengerType));
 }
 
 var controller = new ElevatorController(elevators);
 const int ActiveElevatorId = 1;
 
 Console.WriteLine($"\nBuilding ready: floors {building.MinFloor} to {building.MaxFloor}.");
-Console.WriteLine($"{controller.Count} elevators starting at ground floor ({controller.GroundFloor}).");
+Console.WriteLine(
+    $"{controller.Count} elevators starting at ground floor ({controller.GroundFloor}), " +
+    $"max {maxPassengers} passengers each.");
 Console.WriteLine("Press Enter to continue...");
 Console.ReadLine();
 Console.Clear();

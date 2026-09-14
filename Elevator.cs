@@ -12,6 +12,11 @@ public class Elevator
     public int Id { get; }
     public ElevatorType Type { get; }
 
+    public int PassengerCount { get; private set; }
+
+    public int RemainingPassengerCapacity =>
+        Math.Max(0, Type.MaxPassengers - PassengerCount);
+
     public Elevator(int id, Building building, ElevatorType type)
     {
         Id = id;
@@ -20,6 +25,7 @@ public class Elevator
         MinFloor = building.MinFloor;
         MaxFloor = building.MaxFloor;
         CurrentFloor = GroundFloor;
+        PassengerCount = 0;
     }
 
     // Status - Closed by default
@@ -83,6 +89,64 @@ public class Elevator
         GoTo(GroundFloor);
     }
 
+    public bool CanAcceptPassengers(int count) =>
+        Type.AllowsPassengers
+        && count > 0
+        && count <= RemainingPassengerCapacity;
+
+    public bool BoardPassengers(int count)
+    {
+        if (!DoorsOpen)
+        {
+            Console.WriteLine($"Elevator {Id}: open doors before boarding.");
+            return false;
+        }
+
+        if (!Type.AllowsPassengers)
+        {
+            Console.WriteLine(
+                $"Elevator {Id}: passengers not allowed on {Type.Kind} elevators.");
+            return false;
+        }
+
+        if (!CanAcceptPassengers(count))
+        {
+            Console.WriteLine(
+                $"Elevator {Id}: cannot board {count}. " +
+                $"Capacity {PassengerCount}/{Type.MaxPassengers} " +
+                $"(remaining {RemainingPassengerCapacity}).");
+            return false;
+        }
+
+        PassengerCount += count;
+        Console.WriteLine(
+            $"Elevator {Id}: boarded {count}. " +
+            $"Passengers: {PassengerCount}/{Type.MaxPassengers}");
+        return true;
+    }
+
+    public bool ExitPassengers(int count)
+    {
+        if (!DoorsOpen)
+        {
+            Console.WriteLine($"Elevator {Id}: open doors before exiting.");
+            return false;
+        }
+
+        if (count <= 0 || count > PassengerCount)
+        {
+            Console.WriteLine(
+                $"Elevator {Id}: cannot exit {count}. On board: {PassengerCount}.");
+            return false;
+        }
+
+        PassengerCount -= count;
+        Console.WriteLine(
+            $"Elevator {Id}: exited {count}. " +
+            $"Passengers: {PassengerCount}/{Type.MaxPassengers}");
+        return true;
+    }
+
     public void PrintStatus()
     {
         var directionDescription = CurrentDirection == Direction.Stationary
@@ -90,6 +154,7 @@ public class Elevator
             : $"Going {CurrentDirection}";
 
         Console.WriteLine(
-            $"Elevator {Id} [{Type.Kind}] - Floor: {CurrentFloor}, Doors: {DoorStatus}, Direction: {directionDescription}");
+            $"Elevator {Id} [{Type.Kind}] - Floor: {CurrentFloor}, Doors: {DoorStatus}, " +
+            $"Direction: {directionDescription}, Passengers: {PassengerCount}/{Type.MaxPassengers}");
     }
 }
