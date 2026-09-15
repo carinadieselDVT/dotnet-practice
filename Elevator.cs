@@ -39,18 +39,26 @@ public int Id { get; }
     private bool DoorsOpen => DoorStatus == Status.Open;
 
 // Open Doors
-public void OpenDoors()
+    public void OpenDoors()
     {
-        DoorStatus = Status.Open;
-Console.WriteLine($"Doors open on floor {CurrentFloor} \u2194");
+        if (!DoorsOpen)
+        {
+            DoorStatus = Status.Open;
+// Same black-arrow family as ⬆ (2B06) / ⬇ (2B07): ⬅ (2B05) ➡ (2B95).
+            Console.WriteLine($"Floor {CurrentFloor} \u2B05\u2B95");
+        }
+
         UnboardPassengersForCurrentFloor();
     }
 
     // Close Doors
-public void CloseDoors()
+    public void CloseDoors()
     {
+        if (!DoorsOpen)
+            return;
+
         DoorStatus = Status.Closed;
-        Console.WriteLine($"Doors closed on floor {CurrentFloor} \u2192\u2190");
+Console.WriteLine($"Floor {CurrentFloor} \u2B95\u2B05");
     }
 
     // Go to floor
@@ -64,7 +72,6 @@ public void CloseDoors()
 
         if (floor == CurrentFloor)
         {
-            Console.WriteLine($"Already on floor {CurrentFloor}");
             OpenDoors();
             return;
         }
@@ -72,22 +79,17 @@ public void CloseDoors()
         if (DoorsOpen)
             CloseDoors();
 
-CurrentDirection = floor > CurrentFloor ? Direction.Up : Direction.Down;
-        Console.WriteLine($"Going {CurrentDirection} to floor {floor}...");
+        CurrentDirection = floor > CurrentFloor ? Direction.Up : Direction.Down;
 
         while (CurrentFloor != floor)
         {
             CurrentFloor += CurrentDirection == Direction.Up ? 1 : -1;
 
-            // Arrows only while still traveling; no arrow on the arrival floor.
+            // Arrows only while still traveling; arrival opens doors instead.
             if (CurrentFloor != floor)
             {
                 var arrow = CurrentDirection == Direction.Up ? "\u2B06" : "\u2B07";
-                Console.WriteLine($"Current Floor : {CurrentFloor} {arrow}");
-            }
-            else
-            {
-                Console.WriteLine($"Current Floor : {CurrentFloor}");
+                Console.WriteLine($"Floor {CurrentFloor} {arrow}");
             }
         }
 
@@ -97,7 +99,6 @@ CurrentDirection = floor > CurrentFloor ? Direction.Up : Direction.Down;
 
     public void GoToGroundFloor()
     {
-        Console.WriteLine("Returning to ground floor...");
         GoTo(GroundFloor);
     }
 
@@ -150,9 +151,8 @@ public bool BoardPassengers(int count, int destinationFloor)
         else
             _passengersByDestination[destinationFloor] = count;
 
-        Console.WriteLine(
-            $"Elevator {Id}: boarded {count} passenger(s) for floor {destinationFloor}. " +
-            $"Passengers: {PassengerCount}/{Type.MaxPassengers}");
+Console.WriteLine(
+            $"+{count} boarded → {destinationFloor} ({PassengerCount}/{Type.MaxPassengers})");
         return true;
     }
 
@@ -166,8 +166,7 @@ public bool BoardPassengers(int count, int destinationFloor)
 
         _passengersByDestination.Remove(CurrentFloor);
         Console.WriteLine(
-            $"Elevator {Id}: {exitingCount} passenger(s) exited on floor {CurrentFloor}. " +
-            $"Passengers: {PassengerCount}/{Type.MaxPassengers}");
+            $"-{exitingCount} exited ({PassengerCount}/{Type.MaxPassengers})");
     }
 
     public void PrintStatus()

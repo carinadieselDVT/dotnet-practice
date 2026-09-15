@@ -1,5 +1,6 @@
 public enum ElevatorKind
 {
     Passenger,
-    Freight
+    Freight,
+    HighSpeed
 }

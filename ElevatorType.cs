@@ -28,11 +28,19 @@ public sealed class ElevatorType
             allowsPassengers: true,
             allowsFreight: false);
 
-    public static ElevatorType Freight(int maxWeightKg = 2000, int maxPassengers = 2) =>
+public static ElevatorType Freight(int maxWeightKg = 2000, int maxPassengers = 2) =>
         new(
             kind: ElevatorKind.Freight,
             maxPassengers: maxPassengers,
             maxWeightKg: maxWeightKg,
             allowsPassengers: maxPassengers > 0,
             allowsFreight: true);
+
+    public static ElevatorType HighSpeed(int maxPassengers = 10, int maxWeightKg = 700) =>
+        new(
+            kind: ElevatorKind.HighSpeed,
+            maxPassengers: maxPassengers,
+            maxWeightKg: maxWeightKg,
+            allowsPassengers: true,
+            allowsFreight: false);
 }

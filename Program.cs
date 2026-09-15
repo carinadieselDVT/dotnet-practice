@@ -8,6 +8,10 @@ const int MaxElevators = 5;
 const int MinPassengers = 1;
 const int MaxPassengersAllowed = 20;
 
+const int ElevatorTypePassenger = 1;
+const int ElevatorTypeFreight = 2;
+const int ElevatorTypeHighSpeed = 3;
+
 int minFloor = ReadInt(
     $"Lowest floor ({MinFloorAllowed} to {MaxFloorAllowed}, e.g. -2 or 1): ",
     minAllowed: MinFloorAllowed,
@@ -24,28 +28,16 @@ int elevatorCount = ReadInt(
     minAllowed: 1,
     maxAllowed: MaxElevators);
 
-int maxPassengers = ReadInt(
-    $"Max passengers per elevator ({MinPassengers}-{MaxPassengersAllowed}): ",
-    minAllowed: MinPassengers,
-    maxAllowed: MaxPassengersAllowed);
-
-// Same type/limits for every elevator in the building
-var passengerType = ElevatorType.Passenger(maxPassengers);
-
-var elevators = new List<Elevator>();
-
-for (int elevatorId = 1; elevatorId <= elevatorCount; elevatorId++)
-{
-    elevators.Add(new Elevator(elevatorId, building, passengerType));
-}
-
+var elevatorType = ReadPassengerElevatorType();
+var elevators = CreateElevators(elevatorCount, building, elevatorType);
 var controller = new ElevatorController(elevators);
 
 Console.WriteLine();
 Console.WriteLine("Setup complete");
 Console.WriteLine($"  Floors:     {building.MinFloor} to {building.MaxFloor}");
 Console.WriteLine($"  Elevators:  {controller.Count} (start at floor {controller.GroundFloor})");
-Console.WriteLine($"  Capacity:   {maxPassengers} passengers each");
+Console.WriteLine($"  Type:       {elevatorType.Kind} (all elevators)");
+Console.WriteLine($"  Capacity:   {elevatorType.MaxPassengers} passengers each");
 Console.WriteLine();
 Console.WriteLine("Commands:");
 Console.WriteLine("  <from> <to> <passengers>   e.g. 1 5 2");
@@ -97,6 +89,49 @@ Console.WriteLine("=== Elevator Sim ===");
 
     HandleTrip(controller, callFloor, destinationFloor, passengerCount);
     Console.WriteLine();
+}
+
+static ElevatorType ReadPassengerElevatorType()
+{
+    while (true)
+    {
+        Console.WriteLine();
+        Console.WriteLine("Elevator type (applies to all elevators in this building):");
+        Console.WriteLine($"  {ElevatorTypePassenger}. Passenger");
+        Console.WriteLine($"  {ElevatorTypeFreight}. Freight");
+        Console.WriteLine($"  {ElevatorTypeHighSpeed}. High speed");
+
+        int typeChoice = ReadInt(
+            $"Choose type ({ElevatorTypePassenger}-{ElevatorTypeHighSpeed}): ",
+            minAllowed: ElevatorTypePassenger,
+            maxAllowed: ElevatorTypeHighSpeed);
+
+        if (typeChoice is ElevatorTypeFreight or ElevatorTypeHighSpeed)
+        {
+            Console.WriteLine("Unavailable.");
+            continue;
+        }
+
+        // Valid selection: continue setup with passenger elevators only.
+        int maxPassengers = ReadInt(
+            $"Max passengers per elevator ({MinPassengers}-{MaxPassengersAllowed}): ",
+            minAllowed: MinPassengers,
+            maxAllowed: MaxPassengersAllowed);
+
+        return ElevatorType.Passenger(maxPassengers: maxPassengers);
+    }
+}
+
+static List<Elevator> CreateElevators(int elevatorCount, Building building, ElevatorType elevatorType)
+{
+    var elevators = new List<Elevator>(elevatorCount);
+
+    for (int elevatorId = 1; elevatorId <= elevatorCount; elevatorId++)
+    {
+        elevators.Add(new Elevator(elevatorId, building, elevatorType));
+    }
+
+    return elevators;
 }
 
 static bool IsQuitCommand(string input) =>
@@ -183,12 +218,10 @@ static void HandleTrip(
         return;
     }
 
-    Console.WriteLine(
-        $"Dispatched elevator {elevator.Id} " +
-        $"(on board: {elevator.PassengerCount}/{elevator.Type.MaxPassengers}, " +
-        $"free: {elevator.RemainingPassengerCapacity}).");
+Console.WriteLine(
+        $"Elevator {elevator.Id}: {callFloor} → {destinationFloor}" +
+        (passengerCount > 0 ? $", {passengerCount} passenger(s)" : string.Empty));
 
-    Console.WriteLine($"Elevator {elevator.Id} → call floor {callFloor}...");
     controller.GoTo(elevator.Id, callFloor);
 
     if (passengerCount > 0)
@@ -196,21 +229,13 @@ static void HandleTrip(
         bool boarded = controller.BoardPassengers(elevator.Id, passengerCount, destinationFloor);
         if (!boarded)
         {
-            Console.WriteLine($"Elevator {elevator.Id}: could not board passengers after arrival.");
+            Console.WriteLine("Could not board passengers.");
             return;
         }
     }
 
     if (destinationFloor != callFloor)
-    {
-        Console.WriteLine($"Elevator {elevator.Id} → floor {destinationFloor}...");
         controller.GoTo(elevator.Id, destinationFloor);
-        Console.WriteLine($"Elevator {elevator.Id} is at floor {destinationFloor}.");
-    }
-    else
-    {
-        Console.WriteLine($"Elevator {elevator.Id} is at floor {callFloor}.");
-    }
 }
 
 static int ReadInt(string prompt, int minAllowed, int maxAllowed)
