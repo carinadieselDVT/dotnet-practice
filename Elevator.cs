@@ -1,5 +1,7 @@
 public class Elevator
 {
+    private const int FloorTravelDelayMs = 400;
+
     private readonly Building _building;
     // Hardcoded building params
     public int MinFloor { get; }
@@ -39,13 +41,14 @@ public int Id { get; }
     private bool DoorsOpen => DoorStatus == Status.Open;
 
 // Open Doors
-    public void OpenDoors()
+public void OpenDoors()
     {
         if (!DoorsOpen)
         {
             DoorStatus = Status.Open;
-// Same black-arrow family as ⬆ (2B06) / ⬇ (2B07): ⬅ (2B05) ➡ (2B95).
+            // Same black-arrow family as ⬆ (2B06) / ⬇ (2B07): ⬅ (2B05) ➡ (2B95).
             Console.WriteLine($"Floor {CurrentFloor} \u2B05\u2B95");
+            Pause();
         }
 
         UnboardPassengersForCurrentFloor();
@@ -58,7 +61,8 @@ public int Id { get; }
             return;
 
         DoorStatus = Status.Closed;
-Console.WriteLine($"Floor {CurrentFloor} \u2B95\u2B05");
+        Console.WriteLine($"Floor {CurrentFloor} \u2B95\u2B05");
+        Pause();
     }
 
     // Go to floor
@@ -81,7 +85,7 @@ Console.WriteLine($"Floor {CurrentFloor} \u2B95\u2B05");
 
         CurrentDirection = floor > CurrentFloor ? Direction.Up : Direction.Down;
 
-        while (CurrentFloor != floor)
+while (CurrentFloor != floor)
         {
             CurrentFloor += CurrentDirection == Direction.Up ? 1 : -1;
 
@@ -91,6 +95,8 @@ Console.WriteLine($"Floor {CurrentFloor} \u2B95\u2B05");
                 var arrow = CurrentDirection == Direction.Up ? "\u2B06" : "\u2B07";
                 Console.WriteLine($"Floor {CurrentFloor} {arrow}");
             }
+
+            Pause();
         }
 
         CurrentDirection = Direction.Stationary;
@@ -169,7 +175,7 @@ Console.WriteLine(
             $"-{exitingCount} exited ({PassengerCount}/{Type.MaxPassengers})");
     }
 
-    public void PrintStatus()
+public void PrintStatus()
     {
         var directionDescription = CurrentDirection == Direction.Stationary
             ? CurrentDirection.ToString()
@@ -179,4 +185,6 @@ Console.WriteLine(
             $"Elevator {Id} [{Type.Kind}] - Floor: {CurrentFloor}, Doors: {DoorStatus}, " +
             $"Direction: {directionDescription}, Passengers: {PassengerCount}/{Type.MaxPassengers}");
     }
+
+    private static void Pause() => Thread.Sleep(FloorTravelDelayMs);
 }
